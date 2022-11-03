@@ -1,16 +1,20 @@
-import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { ethers } from "ethers";
-import axios from "axios";
-import { Button } from "../../components/atoms/button";
-import {CONTRACT_ADDRESS, getABI} from "../../utils/utils"
+import {
+  Card,
+  CardActionArea,
+  CardMedia,
+  Typography,
+  CardContent,
+} from "@mui/material";
+import { CONTRACT_ADDRESS, getABI } from "../../utils/utils";
 
-export const Card = ({
+export const CardUi = ({
+  tokenId = "",
   name = "Ryuzetsu NFT #0001",
-  description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  owner = "Pawel Czerwinski",
+  description = "",
   imageCID = "bafybeia7sjg3qocu4y6mpurn6d63dryssjukttznnc2xbulztrsrxk37fy",
-  animationCID = ""
 }) => {
   const [abi, setAbi] = React.useState([]);
   // コントラクトを叩いて、imageとanimationのURLを取得する
@@ -53,33 +57,29 @@ export const Card = ({
   }, []);
 
   return (
-    <div className="flex flex-col p-3 rounded-3xl border-2 pb-3"
-    href="/collector/nftDetail">
-      <img
-        src={
-          `https://cloudflare-ipfs.com/ipfs/${imageCID}`
-        }
-        alt="Ryuzetsu"
-        width={320}
-        height={399}
-        className="rounded-xl"
-      />
-      <span className="text-2xl font-bold m-2">{name}</span>
-      <div className="m-2 break-all max-w-fit">{description}</div>
-      <div className="flex flex-row grow-0 my-auto">
-        <Image
-          src="/sample-profile.png"
-          alt="Owner profile"
-          width={60}
-          height={60}
-          className="rounded-full"
-        />
-        <div className="flex flex-col justify-center">
-        <span className="mx-2">Owned by </span>
-        <span className="mx-2">{owner}</span>
-        </div>
-      </div>
-    </div>
+    <>
+      <Link href={`/collector/detail/${tokenId}`}>
+        <Card sx={{ maxWidth: 345, borderRadius: 3 }}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              width="320"
+              height="399"
+              image={`https://cloudflare-ipfs.com/ipfs/${imageCID}`}
+              alt="Ryuzetsu"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {description}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Link>
+    </>
   );
 };
 
@@ -95,4 +95,3 @@ function getAccessToken() {
   //return process.env.WEB3STORAGE_TOKEN
   return process.env.NEXT_PUBLIC_API_KEY;
 }
-
