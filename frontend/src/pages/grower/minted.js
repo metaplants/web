@@ -1,6 +1,5 @@
-import Image from 'next/image'
-import { Header } from '../../components/layout/header'
-import { Card } from '../../components/organisms/card'
+import { Header } from '@/components/layout/Header';
+import { Card } from '@/components/organisms/Card';
 
 const MyNFTs = () => {
 
