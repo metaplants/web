@@ -1,6 +1,6 @@
 import styles from '../atoms/button.module.css'
 
-export const Button = ({ children, onClick }) => {
+export const Button = ({ children, onClick, disabled }) => {
   return (
     <button
       className={[
@@ -12,6 +12,7 @@ export const Button = ({ children, onClick }) => {
       ].join(" ")
       }
       onClick={onClick}
+      disabled={disabled}
     >
       <span>{children}</span>
     </button>
