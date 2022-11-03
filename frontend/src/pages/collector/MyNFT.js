@@ -1,10 +1,10 @@
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { CircularProgress, Container, Grid } from "@mui/material";
 import { ethers } from "ethers";
-import { Card } from "../../components/organisms/card";
+import { CardUi } from "../../components/organisms/card";
 import { CONTRACT_ADDRESS, ABI } from "../../utils/utils";
-import { LinkBar } from "../../components/atoms/linkBar";
 
 const MyNFTs = ({ _tokenId }) => {
   const [tokenURIs, setTokenURIs] = React.useState([]);
@@ -98,7 +98,7 @@ const MyNFTs = ({ _tokenId }) => {
   };
 
   React.useEffect(() => {
-    console.log("#contract address:",CONTRACT_ADDRESS)
+    console.log("#contract address:", CONTRACT_ADDRESS);
     ethereum = window.ethereum;
     (async () => {
       const acts = await ethereum.request({ method: "eth_accounts" });
@@ -119,34 +119,36 @@ const MyNFTs = ({ _tokenId }) => {
 
   return (
     <>
-      <div className="flex flex-col items-center p-2">
-        <h2 className="text-xl font-medium my-2">Your Digital Agave</h2>
-        
-        {tokenURIs.length > 0? tokenURIs.map(
-          (meta) => (
-            <div key={meta.tokenId} className="my-2 flex flex-col">
-              {`tokenId:${meta.tokenId}`}
-              <Link href="/collector/nftDetail">
-                <Card
+      <Container fixed>
+        <div className="flex flex-col items-center p-2">
+          <h2 className="text-xl font-medium my-2">Your Digital Agave</h2>
+        </div>
+        <Grid container spacing={3} justifyContent="center">
+          {tokenURIs.length > 0 ? (
+            tokenURIs.map((meta) => (
+              <Grid item key={meta.tokenId}>
+                <CardUi
+                  tokenId={meta.tokenId}
                   name={meta.name}
+                  description={meta.description}
                   imageCID={meta.image.slice("ipfs://".length)}
                 />
-              </Link>
-              <LinkBar
-                href="https://oncyber.io/spaces/YtpGpa1ZLwVQUmO2fi3y"
-                target="_blank"
-              >
-                OnCyber
-              </LinkBar>
+              </Grid>
+            ))
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: 500
+              }}
+            >
+              {<CircularProgress />}
             </div>
-          )
-          // name={meta.name}
-          // //owner=""
-          // //imageURL=""
-          // //animationURL=""
-          // />
-        ):<p>loading</p>}
-      </div>
+          )}
+        </Grid>
+      </Container>
     </>
   );
 };
