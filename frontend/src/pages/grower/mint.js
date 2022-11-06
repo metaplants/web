@@ -3,16 +3,15 @@ import { ethers } from "ethers";
 import axios from "axios";
 import React from "react";
 import { Button } from "@/components/atoms/Button";
-import { WEB3STORAGE_TOKEN, getABI, CONTRACT_ADDRESS} from "@/utils/utils"
+import { WEB3STORAGE_TOKEN, getABI, CONTRACT_ADDRESS } from "@/utils/utils";
 
 import { FileDrag } from "@/components/organisms/fileDrag";
 import { InputFile } from "@/components/atoms/inputFile";
-import Loading from "@/components/atoms/loading"
+import Loading from "@/components/atoms/loading";
 
 const UploadNFT = () => {
-
   const [abi, setAbi] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const [imageFile, setImageFile] = React.useState();
   const [animationFile, setAnimationFile] = React.useState();
@@ -37,14 +36,14 @@ const UploadNFT = () => {
   }, []);
 
   const mint = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     console.log("imageFile:", imageFile);
     console.log("animationFile:", animationFile);
 
     // IPFSにアップロード
     const client = new Web3Storage({ token: WEB3STORAGE_TOKEN });
     const uploadIPFS = async (file) => {
-      console.log('uploadIPFS:',file)
+      console.log("uploadIPFS:", file);
       const rootCid = await client.put([file], {
         name: file.name,
         maxRetries: 3,
@@ -63,7 +62,7 @@ const UploadNFT = () => {
     console.log("description:", description);
 
     await mintNFT(imageFileCID, animationFileCID, nftName, description);
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   const mintNFT = async (_imageCID, _animationCID, _name, _description) => {
@@ -72,7 +71,7 @@ const UploadNFT = () => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
-      console.log("abi:",abi)
+      console.log("abi:", abi);
       const nftContract = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
 
       window.contract = nftContract;
@@ -90,7 +89,7 @@ const UploadNFT = () => {
       const tokenId = value.toNumber();
     } catch (error) {
       console.error("Error minting:", error);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -121,13 +120,17 @@ const UploadNFT = () => {
           type="text"
           name="name"
           className="border-2 rounded-lg p-2"
-          onChange={(e)=>{setNftName(e.target.value)}}
+          onChange={(e) => {
+            setNftName(e.target.value);
+          }}
         />
         <label className="mx-2 mt-2">Description</label>
         <textarea
           name="description"
           className="border-2 rounded-lg p-2"
-          onChange={(e)=>{setDescription(e.target.value)}}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
         />
         <div className="my-2 flex flex-col">
           <Button onClick={async () => await mint()}>Upload</Button>
