@@ -2,7 +2,7 @@ import { Web3Storage } from "web3.storage";
 import { ethers } from "ethers";
 import axios from "axios";
 import React from "react";
-import { Button } from "@/components/atoms/Button";
+import { Button } from "@/components/atoms/button";
 import { WEB3STORAGE_TOKEN, getABI, CONTRACT_ADDRESS } from "@/utils/utils";
 
 import { FileDrag } from "@/components/organisms/fileDrag";
