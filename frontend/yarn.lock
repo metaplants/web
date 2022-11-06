@@ -3469,7 +3469,7 @@
   "resolved" "https://registry.npmjs.org/new-array/-/new-array-1.0.0.tgz"
   "version" "1.0.0"
 
-"next@12.2.0":
+"next@^12.2.0":
   "integrity" "sha512-B4j7D3SHYopLYx6/Ark0fenwIar9tEaZZFAaxmKjgcMMexhVJzB3jt7X+6wcdXPPMeUD6r09weUtnDpjox/vIA=="
   "resolved" "https://registry.npmjs.org/next/-/next-12.2.0.tgz"
   "version" "12.2.0"
