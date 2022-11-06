@@ -141,7 +141,7 @@ const MyNFTs = ({ _tokenId }) => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: 500
+                height: 500,
               }}
             >
               {<CircularProgress />}
