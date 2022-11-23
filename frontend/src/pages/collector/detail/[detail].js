@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Suspense } from "react";
 import { useRouter } from "next/router";
 import {
   Box,
   Card,
-  CardActionArea,
-  CardMedia,
   Container,
   FormControl,
   Grid,
@@ -15,6 +14,10 @@ import {
 } from "@mui/material/";
 import { CONTRACT_ADDRESS, ABI } from "@/utils/utils";
 import { ethers } from "ethers";
+import { staticPath } from "@/utils/pathpida/$path";
+import { Canvas, useLoader } from "@react-three/fiber";
+import { Environment, OrbitControls, TransformControls } from "@react-three/drei";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const Detail = () => {
   const router = useRouter();
@@ -82,21 +85,50 @@ const Detail = () => {
     }
   }, [detail]);
 
+  const Model = () => {
+    // location of the 3D model
+    const gltf = useLoader(
+      GLTFLoader,
+      staticPath.agave_titanota_large_resized_glb
+    );
+    return (
+      <>
+        {/* Use scale to control the size of the 3D model */}
+        <primitive object={gltf.scene} scale={0.7} />
+      </>
+    );
+  };
+
   return (
     <>
       <Container fixed>
         <Grid container spacing={2}>
           <Grid item xs={7}>
-            <Card sx={{ borderRadius: 5 }}>
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  image={`https://cloudflare-ipfs.com/ipfs/${meta.image.slice(
-                    "ipfs://".length
-                  )}`}
-                  alt="Ryuzetsu"
+            <Card sx={{ borderRadius: 5, height: 500, m:3}}>
+              <Canvas
+                camera={{
+                  fov: 45,
+                  near: 0.5,
+                  far: 1000,
+                  position: [0, 3, 5]
+                }}
+              >
+                <ambientLight intensity={0.7} />
+                <spotLight
+                  intensity={0.5}
+                  angle={0.1}
+                  penumbra={1}
+                  position={[40, 15, 10]}
+                  castShadow
                 />
-              </CardActionArea>
+                <TransformControls mode="translate" setTranslationSnap={100}>
+                  <Suspense fallback={null}>
+                    <Model />
+                    <Environment preset="city" />
+                  </Suspense>
+                </TransformControls>
+                <OrbitControls makeDefault />
+              </Canvas>
             </Card>
           </Grid>
           <Grid item xs={5}>
