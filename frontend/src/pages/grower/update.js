@@ -1,4 +1,4 @@
-import { Web3Storage } from "web3.storage";
+import { uploadIPFS } from "@/utils/uploadIPFS";
 import { ethers } from "ethers";
 import axios from "axios";
 import React from "react";
@@ -43,31 +43,20 @@ const UploadNFT = () => {
     console.log("animationFile:", animationFile);
 
     // IPFSにアップロード
-    const client = new Web3Storage({ token: WEB3STORAGE_TOKEN });
-    const uploadIPFS = async (file) => {
-      console.log('uploadIPFS:',file)
-      const rootCid = await client.put([file], {
-        name: file.name,
-        maxRetries: 3,
-      });
-      const res = await client.get(rootCid);
-      const files = await res.files();
-      console.log("files[0]:", files[0]);
-      return files[0].cid;
-    };
-    const imageFileCID = await uploadIPFS(imageFile);
-    const animationFileCID = await uploadIPFS(animationFile);
 
-    console.log("imageFileCID:", imageFileCID);
-    console.log("animationFileCID:", animationFileCID);
+    const imageFilePath = await uploadIPFS(imageFile);
+    const animationFilePath = await uploadIPFS(animationFile);
+
+    console.log("imageFilePath:", imageFilePath);
+    console.log("animationFilePath:", animationFilePath);
     console.log("nftName:", nftName);
     console.log("description:", description);
 
-    await mintNFT(imageFileCID, animationFileCID, nftName, description);
+    await updateNFT(imageFilePath, animationFilePath, nftName, description);
     setIsLoading(false)
   };
 
-  const mintNFT = async (_imageCID, _animationCID, _name, _description) => {
+  const updateNFT = async (_imagePath, _animationPath, _name, _description) => {
     console.log("preparing mint...");
     ethereum = window.ethereum;
     try {
@@ -79,8 +68,8 @@ const UploadNFT = () => {
       window.contract = nftContract;
       const nftTx = await nftContract.updateTokenURI(
         tokenId,
-        `ipfs://${_imageCID}`,
-        `ipfs://${_animationCID}`,
+        `ipfs://${_imagePath}`,
+        `ipfs://${_animationPath}`,
       );
 
       const tx = await nftTx.wait();
