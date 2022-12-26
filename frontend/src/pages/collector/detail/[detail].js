@@ -12,11 +12,15 @@ import {
   Stack,
   Typography,
 } from "@mui/material/";
-import { CONTRACT_ADDRESS, ABI } from "@/utils/utils";
+import { CONTRACT_ADDRESS, ABI, w3sLink } from "@/utils/utils";
 import { ethers } from "ethers";
 import { staticPath } from "@/utils/pathpida/$path";
 import { Canvas, useLoader } from "@react-three/fiber";
-import { Environment, OrbitControls, TransformControls } from "@react-three/drei";
+import {
+  Environment,
+  OrbitControls,
+  TransformControls,
+} from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const Detail = () => {
@@ -73,7 +77,7 @@ const Detail = () => {
   }, [router]);
 
   useEffect(() => {
-    if (detail) {
+    if (detail != undefined) {
       console.log("#contract address:", CONTRACT_ADDRESS);
       const ethereum = window.ethereum;
       (async () => {
@@ -87,10 +91,7 @@ const Detail = () => {
 
   const Model = () => {
     // location of the 3D model
-    const gltf = useLoader(
-      GLTFLoader,
-      staticPath.agave_titanota_large_resized_glb
-    );
+    const gltf = useLoader(GLTFLoader, w3sLink(meta.animation_url));
     return (
       <>
         {/* Use scale to control the size of the 3D model */}
@@ -104,13 +105,13 @@ const Detail = () => {
       <Container fixed>
         <Grid container spacing={2}>
           <Grid item xs={7}>
-            <Card sx={{ borderRadius: 5, height: 500, m:3}}>
+            <Card sx={{ borderRadius: 5, height: 500, m: 3 }}>
               <Canvas
                 camera={{
                   fov: 45,
                   near: 0.5,
                   far: 1000,
-                  position: [0, 3, 5]
+                  position: [0, 3, 5],
                 }}
               >
                 <ambientLight intensity={0.7} />
@@ -123,7 +124,7 @@ const Detail = () => {
                 />
                 <TransformControls mode="translate" setTranslationSnap={100}>
                   <Suspense fallback={null}>
-                    <Model />
+                    {meta.animation_url && <Model />}
                     <Environment preset="city" />
                   </Suspense>
                 </TransformControls>
