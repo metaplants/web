@@ -11,14 +11,7 @@ contract MetaplantsFree is ERC1155 {
     Counters.Counter private _tokenIds;
     string[] baseURIs;
     address[] minters;
-    bool[] isValid;
     mapping(uint256 => string) private _tokenURIs;
-    struct Record {
-        string imageURI;
-        string animationURI;
-        uint256 timestamp;
-    }
-    mapping(uint256 => Record[]) record;
 
     event Mint(address sender, uint256 tokenId);
     event UpdateTokenURI(address sender, uint256 tokenId);
@@ -59,12 +52,9 @@ contract MetaplantsFree is ERC1155 {
         );
         _mint(msg.sender, newtokenId, amount, "");
         _setTokenURI(newtokenId, newTokenURI);
-        record[newtokenId].push(
-            Record(imageURI, animationURI, block.timestamp)
-        );
+
         baseURIs.push(newBaseURI);
         minters.push(msg.sender);
-        isValid.push(true);
         console.log(
             "An NFT w/ ID %s has been minted to %s",
             newtokenId,
@@ -79,18 +69,16 @@ contract MetaplantsFree is ERC1155 {
         string memory imageURI,
         string memory animationURI
     ) public {
-        // update metadata and add record
+        // update metadata
         require(tokenId <= _tokenIds.current() - 1, "Over existing tokenId");
         require(
             msg.sender == minters[tokenId],
             "Only minter can update metadata"
         );
-        require(isValid[tokenId], "Token is invalid");
         _setTokenURI(
             tokenId,
             makeTokenURI(imageURI, animationURI, baseURIs[tokenId])
         );
-        record[tokenId].push(Record(imageURI, animationURI, block.timestamp));
         emit UpdateTokenURI(msg.sender, tokenId);
     }
 
@@ -146,19 +134,11 @@ contract MetaplantsFree is ERC1155 {
         return string(abi.encodePacked("data:application/json;base64,", json));
     }
 
-    function getIsValid(uint256 tokenId) public view returns (bool) {
-        return isValid[tokenId];
-    }
-
     function getCounter() public view returns (uint256) {
         return _tokenIds.current();
     }
 
     function getMinter(uint256 tokenId) public view returns (address) {
         return minters[tokenId];
-    }
-
-    function getRecord(uint256 tokenId) public view returns (Record[] memory) {
-        return record[tokenId];
     }
 }
