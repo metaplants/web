@@ -8,11 +8,19 @@ const privateKey = process.env.PRIVATE_KEY;
 const web3 = new Web3(endPoint);
 const contract = new web3.eth.Contract(abi, contractAddress);
 
+const INPUTS = {
+  id: 0,
+  imageURI: "ipfs://QmecMajSJbrDm1U7ks9CTgDDSWm25Jr2mRzrDtDP5hWHdV",
+  animationURI: "ipfs://QmWAarJhYsWeYCtJhQnETXQ69zyhfGLAFwpqTEq5Bd7Pdd",
+  backgroundColor: "000000",
+};
+
 const main = async () => {
   const transaction = contract.methods.updateTokenURI(
-    0,
-    "ipfs://QmZ5iw9GvTw2Ann8Tu9veuKvzWqV213io5uci6HpwJDRys",
-    "ipfs://QmXETDmShYW1f1r3oEtsw5LEeQ7QZdwox4dhDQWHLc6UQq",
+    INPUTS.id,
+    INPUTS.imageURI,
+    INPUTS.animationURI,
+    INPUTS.backgroundColor
   );
   const options = {
     to: transaction._parent._address,

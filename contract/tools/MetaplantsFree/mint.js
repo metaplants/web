@@ -8,14 +8,25 @@ const privateKey = process.env.PRIVATE_KEY;
 const web3 = new Web3(endPoint);
 const contract = new web3.eth.Contract(abi, contractAddress);
 
+const INPUTS = {
+  imageURI: "ipfs://QmecMajSJbrDm1U7ks9CTgDDSWm25Jr2mRzrDtDP5hWHdV",
+  animationURI: "ipfs://QmWAarJhYsWeYCtJhQnETXQ69zyhfGLAFwpqTEq5Bd7Pdd",
+  backgroundColor: "000000",
+  name: "metaplants pacypo NFT",
+  description: "pass for metaplants genesis sale",
+  amount: 10000,
+};
+
 const main = async () => {
   const transaction = contract.methods.mint(
-    "ipfs://QmZ5iw9GvTw2Ann8Tu9veuKvzWqV213io5uci6HpwJDRys",
-    "ipfs://QmVEb2rmBXEci1ojgnogEGK9N4qiZpRsmzvGYv5MXSuUFX",
-    "metaplants NFT",
-    "metaplants NFT giveaway",
-    10000
+    INPUTS.imageURI,
+    INPUTS.animationURI,
+    INPUTS.backgroundColor,
+    INPUTS.name,
+    INPUTS.description,
+    INPUTS.amount
   );
+
   const options = {
     to: transaction._parent._address,
     data: transaction.encodeABI(),
