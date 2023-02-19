@@ -7,6 +7,9 @@ import "hardhat/console.sol";
 import {Base64} from "./libraries/Base64.sol";
 
 contract MetaplantsFree is ERC1155 {
+    string public name;
+    string public symbol;
+
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
     string[] baseURIs;
@@ -23,13 +26,16 @@ contract MetaplantsFree is ERC1155 {
         bytes
     );
 
-    constructor() ERC1155("") {
-        console.log("This is my NFT contract.");
+    constructor(string memory name_, string memory symbol_) ERC1155("") {
+        name = name_;
+        symbol = symbol_;
+        console.log("Deploying a MetaplantsFree contract");
     }
 
     function mint(
         string memory imageURI,
         string memory animationURI,
+        string memory backgroundColor,
         string memory name,
         string memory description,
         uint256 amount
@@ -48,6 +54,7 @@ contract MetaplantsFree is ERC1155 {
         string memory newTokenURI = makeTokenURI(
             imageURI,
             animationURI,
+            backgroundColor,
             newBaseURI
         );
         _mint(msg.sender, newtokenId, amount, "");
@@ -67,7 +74,8 @@ contract MetaplantsFree is ERC1155 {
     function updateTokenURI(
         uint256 tokenId,
         string memory imageURI,
-        string memory animationURI
+        string memory animationURI,
+        string memory backgroundColor
     ) public {
         // update metadata
         require(tokenId <= _tokenIds.current() - 1, "Over existing tokenId");
@@ -77,7 +85,12 @@ contract MetaplantsFree is ERC1155 {
         );
         _setTokenURI(
             tokenId,
-            makeTokenURI(imageURI, animationURI, baseURIs[tokenId])
+            makeTokenURI(
+                imageURI,
+                animationURI,
+                backgroundColor,
+                baseURIs[tokenId]
+            )
         );
         emit UpdateTokenURI(msg.sender, tokenId);
     }
@@ -114,6 +127,7 @@ contract MetaplantsFree is ERC1155 {
     function makeTokenURI(
         string memory imageURI,
         string memory animationURI,
+        string memory backgroundColor,
         string memory baseURI
     ) private pure returns (string memory) {
         string memory json = Base64.encode(
@@ -126,6 +140,8 @@ contract MetaplantsFree is ERC1155 {
                         imageURI,
                         '", "animation_url": "',
                         animationURI,
+                        '", "background_color": "',
+                        backgroundColor,
                         '"}'
                     )
                 )
