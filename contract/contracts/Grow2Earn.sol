@@ -142,15 +142,16 @@ contract Grow2Earn is ERC721URIStorage {
         emit TokenURIRedeemed(msg.sender, tokenId);
     }
 
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 tokenId
-    ) internal view override {
-        // mintは許可（そのまま処理を通す）
-        // transferは禁止（処理を中断させる）
-        require(from == address(0) || isValid[tokenId], "blocked transfer");
-    }
+    // function _beforeTokenTransfer(
+    //     address from,
+    //     address to,
+    //     uint256 tokenId
+    // ) internal view override {
+    //     // mintは許可（そのまま処理を通す）
+    //     // transferは禁止（処理を中断させる）
+    //     require(from == address(0) || isValid[tokenId], "blocked transfer");
+    //     super._beforeTokenTransfer(from, to, tokenId);
+    // }
 
     function getIsValid(uint256 tokenId) public view returns (bool) {
         return isValid[tokenId];
