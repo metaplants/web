@@ -10,10 +10,11 @@ const contract = new web3.eth.Contract(abi, contractAddress);
 
 const INPUTS = {
   imageURI: "ipfs://QmecMajSJbrDm1U7ks9CTgDDSWm25Jr2mRzrDtDP5hWHdV",
-  animationURI: "ipfs://QmWAarJhYsWeYCtJhQnETXQ69zyhfGLAFwpqTEq5Bd7Pdd",
-  backgroundColor: "000000",
-  name: "metaplants pacypo NFT",
-  description: "pass for metaplants genesis sale",
+  animationURI: "ipfs://QmQRjTV7knx5wUDGiFYWu6KDPH3DKv9sE5qiwmRSndmgMv",
+  backgroundColor: "1D1E20",
+  name: "Metaplants #1",
+  description:
+    "パキポディウム・グラキリス。人気の塊根植物の一つ。砂漠などの厳しい環境で生き残るために、茎や根を膨らませて水分を蓄えます。お腹のムチムチ感がたまらない。グラキリスなどが特に人気があります。",
   amount: 10000,
 };
 
