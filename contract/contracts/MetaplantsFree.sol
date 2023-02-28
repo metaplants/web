@@ -3,10 +3,11 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 import {Base64} from "./libraries/Base64.sol";
 
-contract MetaplantsFree is ERC1155 {
+contract MetaplantsFree is ERC1155, Ownable {
     string public name;
     string public symbol;
 
@@ -26,7 +27,10 @@ contract MetaplantsFree is ERC1155 {
         bytes
     );
 
-    constructor(string memory name_, string memory symbol_) ERC1155("") {
+    constructor(string memory name_, string memory symbol_)
+        ERC1155("")
+        Ownable()
+    {
         name = name_;
         symbol = symbol_;
         console.log("Deploying a MetaplantsFree contract");
@@ -39,9 +43,9 @@ contract MetaplantsFree is ERC1155 {
         string memory name,
         string memory description,
         uint256 amount
-    ) public {
+    ) public onlyOwner {
         // mint a new ERC1155 NFT having metadata with imageURI (image path) and animationURI (3D model path)
-        uint256 newtokenId = _tokenIds.current(); // TODO minterの制限を入れる
+        uint256 newtokenId = _tokenIds.current();
         string memory newBaseURI = string(
             abi.encodePacked(
                 '"name": "',
@@ -76,7 +80,7 @@ contract MetaplantsFree is ERC1155 {
         string memory imageURI,
         string memory animationURI,
         string memory backgroundColor
-    ) public {
+    ) public onlyOwner {
         // update metadata
         require(tokenId <= _tokenIds.current() - 1, "Over existing tokenId");
         require(
