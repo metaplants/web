@@ -13,7 +13,6 @@ contract MetaplantsFree is ERC1155, Ownable {
 
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
-    string[] baseURIs;
     mapping(uint256 => string) private _tokenURIs;
 
     event Mint(address sender, uint256 tokenId);
@@ -26,10 +25,10 @@ contract MetaplantsFree is ERC1155, Ownable {
         bytes
     );
 
-    constructor(string memory name_, string memory symbol_)
-        ERC1155("")
-        Ownable()
-    {
+    constructor(
+        string memory name_,
+        string memory symbol_
+    ) ERC1155("") Ownable() {
         name = name_;
         symbol = symbol_;
         console.log("Deploying a MetaplantsFree contract");
@@ -45,25 +44,17 @@ contract MetaplantsFree is ERC1155, Ownable {
     ) public onlyOwner {
         // mint a new ERC1155 NFT having metadata with imageURI (image path) and animationURI (3D model path)
         uint256 newtokenId = _tokenIds.current();
-        string memory newBaseURI = string(
-            abi.encodePacked(
-                '"name": "',
+        _mint(msg.sender, newtokenId, amount, "");
+        _setTokenURI(
+            newtokenId,
+            makeTokenURI(
+                imageURI,
+                animationURI,
+                backgroundColor,
                 name,
-                '", "description": "',
-                description,
-                '"'
+                description
             )
         );
-        string memory newTokenURI = makeTokenURI(
-            imageURI,
-            animationURI,
-            backgroundColor,
-            newBaseURI
-        );
-        _mint(msg.sender, newtokenId, amount, "");
-        _setTokenURI(newtokenId, newTokenURI);
-
-        baseURIs.push(newBaseURI);
         console.log(
             "An NFT w/ ID %s has been minted to %s",
             newtokenId,
@@ -89,7 +80,8 @@ contract MetaplantsFree is ERC1155, Ownable {
                 imageURI,
                 animationURI,
                 backgroundColor,
-                baseURIs[tokenId]
+                name,
+                description
             )
         );
         emit UpdateTokenURI(msg.sender, tokenId);
@@ -128,14 +120,17 @@ contract MetaplantsFree is ERC1155, Ownable {
         string memory imageURI,
         string memory animationURI,
         string memory backgroundColor,
-        string memory baseURI
+        string memory name,
+        string memory description
     ) private pure returns (string memory) {
         string memory json = Base64.encode(
             bytes(
                 string(
                     abi.encodePacked(
-                        "{",
-                        baseURI,
+                        '{"name": ',
+                        name,
+                        ', "description": "',
+                        description,
                         ', "image": "',
                         imageURI,
                         '", "animation_url": "',
