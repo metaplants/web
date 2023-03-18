@@ -1,8 +1,10 @@
 require("dotenv").config();
 const Web3 = require("web3");
-const { abi } = require("./MetaplantsFree.json");
+const {
+  abi,
+} = require("../artifacts/contracts/MetaplantsPass.sol/MetaplantsPass.json");
 const endPoint = process.env.STAGING_ALCHEMY_POLYGON_MUMBAI_ENDPOINT;
-const contractAddress = process.env.CONTRACT_ADDRESS_METAPLANTS_FREE;
+const contractAddress = process.env.CONTRACT_ADDRESS_METAPLANTS_PATH;
 const privateKey = process.env.PRIVATE_KEY;
 
 const web3 = new Web3(endPoint);
@@ -12,10 +14,10 @@ const INPUTS = {
   imageURI: "ipfs://QmecMajSJbrDm1U7ks9CTgDDSWm25Jr2mRzrDtDP5hWHdV",
   animationURI: "ipfs://QmQRjTV7knx5wUDGiFYWu6KDPH3DKv9sE5qiwmRSndmgMv",
   backgroundColor: "1D1E20",
-  name: "Metaplants #1",
+  name: "metaplants NFT Pass #1",
   description:
     "パキポディウム・グラキリス。人気の塊根植物の一つ。砂漠などの厳しい環境で生き残るために、茎や根を膨らませて水分を蓄えます。お腹のムチムチ感がたまらない。グラキリスなどが特に人気があります。",
-  amount: 10000,
+  amount: 100,
 };
 
 const main = async () => {

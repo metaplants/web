@@ -6,7 +6,7 @@ const main = async () => {
   const receiverAddresses = receivers.map((r) => r.address);
   console.log(senderAddress, receiverAddresses);
   const nftContractFactory = await hre.ethers.getContractFactory(
-    "MetaplantsFree"
+    "MetaplantsPass"
   );
   const nftContract = await nftContractFactory.deploy();
   await nftContract.deployed();

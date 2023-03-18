@@ -9,14 +9,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 import {Base64} from "./libraries/Base64.sol";
 
-contract MetaplantsFree is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
+contract MetaplantsPass is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
     string public name;
     string public symbol;
 
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
-    string[] baseURIs;
-    address[] minters;
     mapping(uint256 => string) private _tokenURIs;
 
     event Mint(address sender, uint256 tokenId);
@@ -36,7 +34,7 @@ contract MetaplantsFree is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
         name = name_;
         symbol = symbol_;
         _setDefaultRoyalty(owner(), 1000);
-        console.log("Deploying a MetaplantsFree contract");
+        console.log("Deploying a MetaplantsPass contract");
     }
 
     function mint(
@@ -49,26 +47,17 @@ contract MetaplantsFree is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
     ) public onlyOwner {
         // mint a new ERC1155 NFT having metadata with imageURI (image path) and animationURI (3D model path)
         uint256 newtokenId = _tokenIds.current();
-        string memory newBaseURI = string(
-            abi.encodePacked(
-                '"name": "',
+        _mint(msg.sender, newtokenId, amount, "");
+        _setTokenURI(
+            newtokenId,
+            makeTokenURI(
+                imageURI,
+                animationURI,
+                backgroundColor,
                 name,
-                '", "description": "',
-                description,
-                '"'
+                description
             )
         );
-        string memory newTokenURI = makeTokenURI(
-            imageURI,
-            animationURI,
-            backgroundColor,
-            newBaseURI
-        );
-        _mint(msg.sender, newtokenId, amount, "");
-        _setTokenURI(newtokenId, newTokenURI);
-
-        baseURIs.push(newBaseURI);
-        minters.push(msg.sender);
         console.log(
             "An NFT w/ ID %s has been minted to %s",
             newtokenId,
@@ -82,21 +71,20 @@ contract MetaplantsFree is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
         uint256 tokenId,
         string memory imageURI,
         string memory animationURI,
-        string memory backgroundColor
+        string memory backgroundColor,
+        string memory name,
+        string memory description
     ) public onlyOwner {
         // update metadata
         require(tokenId <= _tokenIds.current() - 1, "Over existing tokenId");
-        require(
-            msg.sender == minters[tokenId],
-            "Only minter can update metadata"
-        );
         _setTokenURI(
             tokenId,
             makeTokenURI(
                 imageURI,
                 animationURI,
                 backgroundColor,
-                baseURIs[tokenId]
+                name,
+                description
             )
         );
         emit UpdateTokenURI(msg.sender, tokenId);
@@ -135,15 +123,18 @@ contract MetaplantsFree is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
         string memory imageURI,
         string memory animationURI,
         string memory backgroundColor,
-        string memory baseURI
+        string memory name,
+        string memory description
     ) private pure returns (string memory) {
         string memory json = Base64.encode(
             bytes(
                 string(
                     abi.encodePacked(
-                        "{",
-                        baseURI,
-                        ', "image": "',
+                        '{"name": "',
+                        name,
+                        '", "description": "',
+                        description,
+                        '", "image": "',
                         imageURI,
                         '", "animation_url": "',
                         animationURI,
@@ -159,10 +150,6 @@ contract MetaplantsFree is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
 
     function getCounter() public view returns (uint256) {
         return _tokenIds.current();
-    }
-
-    function getMinter(uint256 tokenId) public view returns (address) {
-        return minters[tokenId];
     }
 
     function supportsInterface(

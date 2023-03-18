@@ -1,9 +1,9 @@
-const CONTRACT_NAME = "Metaplants";
+const CONTRACT_NAME = "metaplants NFT Pass";
 const CONTRACT_SYMBOL = "MPT";
 
 const main = async () => {
   const nftContractFactory = await hre.ethers.getContractFactory(
-    "MetaplantsFree"
+    "MetaplantsPass"
   );
   const nftContract = await nftContractFactory.deploy(
     CONTRACT_NAME,
