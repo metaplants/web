@@ -2,12 +2,13 @@
 pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 import {Base64} from "./libraries/Base64.sol";
 
-contract MetaplantsFree is ERC1155, Ownable {
+contract MetaplantsFree is ERC1155, Ownable, ERC2981 {
     string public name;
     string public symbol;
 
@@ -27,12 +28,13 @@ contract MetaplantsFree is ERC1155, Ownable {
         bytes
     );
 
-    constructor(string memory name_, string memory symbol_)
-        ERC1155("")
-        Ownable()
-    {
+    constructor(
+        string memory name_,
+        string memory symbol_
+    ) ERC1155("") Ownable() {
         name = name_;
         symbol = symbol_;
+        _setDefaultRoyalty(owner(), 1000);
         console.log("Deploying a MetaplantsFree contract");
     }
 
@@ -160,5 +162,37 @@ contract MetaplantsFree is ERC1155, Ownable {
 
     function getMinter(uint256 tokenId) public view returns (address) {
         return minters[tokenId];
+    }
+
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view override(ERC1155, ERC2981) returns (bool) {
+        return
+            interfaceId == type(ERC1155).interfaceId ||
+            interfaceId == type(ERC2981).interfaceId ||
+            super.supportsInterface(interfaceId);
+    }
+
+    function setDefaultRoyalty(
+        address receiver,
+        uint96 feeNumerator
+    ) external onlyOwner {
+        _setDefaultRoyalty(receiver, feeNumerator);
+    }
+
+    function deleteDefaultRoyalty() external onlyOwner {
+        _deleteDefaultRoyalty();
+    }
+
+    function setTokenRoyalty(
+        uint256 tokenId,
+        address receiver,
+        uint96 feeNumerator
+    ) external onlyOwner {
+        _setTokenRoyalty(tokenId, receiver, feeNumerator);
+    }
+
+    function resetTokenRoyalty(uint256 tokenId) external onlyOwner {
+        _resetTokenRoyalty(tokenId);
     }
 }
