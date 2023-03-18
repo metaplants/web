@@ -130,11 +130,11 @@ contract MetaplantsPass is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
             bytes(
                 string(
                     abi.encodePacked(
-                        '{"name": ',
+                        '{"name": "',
                         name,
-                        ', "description": "',
+                        '", "description": "',
                         description,
-                        ', "image": "',
+                        '", "image": "',
                         imageURI,
                         '", "animation_url": "',
                         animationURI,
