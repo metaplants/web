@@ -1,9 +1,11 @@
 require("dotenv").config();
 const Web3 = require("web3");
-const { abi } = require("./MetaplantsFree.json");
+const {
+  abi,
+} = require("../artifacts/contracts/MetaplantsPass.sol/MetaplantsPass.json");
 
 const endPoint = process.env.STAGING_ALCHEMY_POLYGON_MUMBAI_ENDPOINT;
-const contractAddress = process.env.CONTRACT_ADDRESS_METAPLANTS_FREE;
+const contractAddress = process.env.CONTRACT_ADDRESS_METAPLANTS_PASS;
 const privateKey = process.env.PRIVATE_KEY;
 
 const web3 = new Web3(endPoint);
