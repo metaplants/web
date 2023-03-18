@@ -14,7 +14,6 @@ contract MetaplantsFree is ERC1155, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
     string[] baseURIs;
-    address[] minters;
     mapping(uint256 => string) private _tokenURIs;
 
     event Mint(address sender, uint256 tokenId);
@@ -65,7 +64,6 @@ contract MetaplantsFree is ERC1155, Ownable {
         _setTokenURI(newtokenId, newTokenURI);
 
         baseURIs.push(newBaseURI);
-        minters.push(msg.sender);
         console.log(
             "An NFT w/ ID %s has been minted to %s",
             newtokenId,
@@ -79,14 +77,12 @@ contract MetaplantsFree is ERC1155, Ownable {
         uint256 tokenId,
         string memory imageURI,
         string memory animationURI,
-        string memory backgroundColor
+        string memory backgroundColor,
+        string memory name,
+        string memory description
     ) public onlyOwner {
         // update metadata
         require(tokenId <= _tokenIds.current() - 1, "Over existing tokenId");
-        require(
-            msg.sender == minters[tokenId],
-            "Only minter can update metadata"
-        );
         _setTokenURI(
             tokenId,
             makeTokenURI(
@@ -156,9 +152,5 @@ contract MetaplantsFree is ERC1155, Ownable {
 
     function getCounter() public view returns (uint256) {
         return _tokenIds.current();
-    }
-
-    function getMinter(uint256 tokenId) public view returns (address) {
-        return minters[tokenId];
     }
 }
