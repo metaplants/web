@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.13;
+import "operator-filter-registry/src/DefaultOperatorFilterer.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 import {Base64} from "./libraries/Base64.sol";
 
-contract MetaplantsFree is ERC1155, Ownable {
+contract MetaplantsFree is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
     string public name;
     string public symbol;
 
@@ -31,6 +33,7 @@ contract MetaplantsFree is ERC1155, Ownable {
     ) ERC1155("") Ownable() {
         name = name_;
         symbol = symbol_;
+        _setDefaultRoyalty(owner(), 1000);
         console.log("Deploying a MetaplantsFree contract");
     }
 
@@ -147,5 +150,65 @@ contract MetaplantsFree is ERC1155, Ownable {
 
     function getCounter() public view returns (uint256) {
         return _tokenIds.current();
+    }
+
+    function getMinter(uint256 tokenId) public view returns (address) {
+        return minters[tokenId];
+    }
+
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(ERC1155, ERC2981) returns (bool) {
+        return super.supportsInterface(interfaceId);
+    }
+
+    function setDefaultRoyalty(
+        address receiver,
+        uint96 feeNumerator
+    ) external onlyOwner {
+        _setDefaultRoyalty(receiver, feeNumerator);
+    }
+
+    function deleteDefaultRoyalty() external onlyOwner {
+        _deleteDefaultRoyalty();
+    }
+
+    function setTokenRoyalty(
+        uint256 tokenId,
+        address receiver,
+        uint96 feeNumerator
+    ) external onlyOwner {
+        _setTokenRoyalty(tokenId, receiver, feeNumerator);
+    }
+
+    function resetTokenRoyalty(uint256 tokenId) external onlyOwner {
+        _resetTokenRoyalty(tokenId);
+    }
+
+    function setApprovalForAll(
+        address operator,
+        bool approved
+    ) public override onlyAllowedOperatorApproval(operator) {
+        super.setApprovalForAll(operator, approved);
+    }
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        uint256 amount,
+        bytes memory data
+    ) public override onlyAllowedOperator(from) {
+        super.safeTransferFrom(from, to, tokenId, amount, data);
+    }
+
+    function safeBatchTransferFrom(
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) public virtual override onlyAllowedOperator(from) {
+        super.safeBatchTransferFrom(from, to, ids, amounts, data);
     }
 }
