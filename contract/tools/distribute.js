@@ -13,7 +13,7 @@ const contract = new web3.eth.Contract(abi, contractAddress);
 
 const senderAddress = web3.eth.accounts.privateKeyToAccount(privateKey).address;
 const receiverAddresses = [];
-for (let i = 0; i < 500; i++) {
+for (let i = 0; i < 5; i++) {
   receiverAddresses.push(web3.eth.accounts.create().address);
 }
 
@@ -28,7 +28,7 @@ const main = async () => {
   const options = {
     to: transaction._parent._address,
     data: transaction.encodeABI(),
-    gas: "20000000",
+    gas: "200000",
   };
   const signed = await web3.eth.accounts.signTransaction(options, privateKey);
   const receipt = await web3.eth.sendSignedTransaction(signed.rawTransaction);
