@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 import {Base64} from "./libraries/Base64.sol";
 
-contract MetaplantsFree is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
+contract MetaplantsPass is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
     string public name;
     string public symbol;
 
@@ -34,7 +34,7 @@ contract MetaplantsFree is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
         name = name_;
         symbol = symbol_;
         _setDefaultRoyalty(owner(), 1000);
-        console.log("Deploying a MetaplantsFree contract");
+        console.log("Deploying a MetaplantsPass contract");
     }
 
     function mint(
@@ -150,10 +150,6 @@ contract MetaplantsFree is ERC1155, Ownable, ERC2981, DefaultOperatorFilterer {
 
     function getCounter() public view returns (uint256) {
         return _tokenIds.current();
-    }
-
-    function getMinter(uint256 tokenId) public view returns (address) {
-        return minters[tokenId];
     }
 
     function supportsInterface(

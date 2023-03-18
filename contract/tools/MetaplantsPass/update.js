@@ -13,6 +13,9 @@ const INPUTS = {
   imageURI: "ipfs://QmecMajSJbrDm1U7ks9CTgDDSWm25Jr2mRzrDtDP5hWHdV",
   animationURI: "ipfs://QmWAarJhYsWeYCtJhQnETXQ69zyhfGLAFwpqTEq5Bd7Pdd",
   backgroundColor: "000000",
+  name: "Metaplants #1",
+  description:
+    "パキポディウム・グラキリス。人気の塊根植物の一つ。砂漠などの厳しい環境で生き残るために、茎や根を膨らませて水分を蓄えます。お腹のムチムチ感がたまらない。グラキリスなどが特に人気があります。",
 };
 
 const main = async () => {
@@ -20,7 +23,9 @@ const main = async () => {
     INPUTS.id,
     INPUTS.imageURI,
     INPUTS.animationURI,
-    INPUTS.backgroundColor
+    INPUTS.backgroundColor,
+    INPUTS.name,
+    INPUTS.description
   );
   const options = {
     to: transaction._parent._address,
