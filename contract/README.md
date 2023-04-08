@@ -2,7 +2,7 @@
 ```sh
 npx hardhat compile
 # testnet mumbai 
-npx hardhat run scripts/deployMetaplantsPath.js --network mumbai
+npx hardhat run scripts/deployMetaplantsPass.js --network mumbai
 # mainnet polygon 
-npx hardhat run scripts/deployMetaplantsPath.js --network polygon
+npx hardhat run scripts/deployMetaplantsPass.js --network polygon
 ```
