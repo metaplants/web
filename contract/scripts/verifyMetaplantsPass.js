@@ -1,6 +1,6 @@
 const CONTRACT_NAME = "metaplants NFT Pass";
 const CONTRACT_SYMBOL = "MPT";
-const contractAddress = process.env.CONTRACT_ADDRESS_METAPLANTS_PASS;
+const contractAddress = process.env.CONTRACT_ADDRESS_METAPLANTS_PASS_MAINNET;
 
 const main = async () => {
   await hre.run("verify:verify", {

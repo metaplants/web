@@ -23,21 +23,21 @@ module.exports = {
   networks: {
     rinkeby: {
       url: process.env.STAGING_ALCHEMY_RINKEBY_ENDPOINT,
-      accounts: [process.env.PRIVATE_KEY],
+      accounts: [process.env.PRIVATE_KEY_MAINNET],
     },
     mumbai: {
-      url: process.env.STAGING_ALCHEMY_POLYGON_MUMBAI_ENDPOINT,
-      accounts: [process.env.PRIVATE_KEY],
+      url: process.env.STAGING_ALCHEMY_POLYGON_TESTNET_ENDPOINT,
+      accounts: [process.env.PRIVATE_KEY_MAINNET],
     },
     mainnet: {
       chainId: 1,
       url: process.env.PROD_ALCHEMY_KEY,
-      accounts: [process.env.PRIVATE_KEY],
+      accounts: [process.env.PRIVATE_KEY_MAINNET],
     },
     polygon: {
       chainId: 137,
       url: process.env.STAGING_ALCHEMY_POLYGON_MAINNET_ENDPOINT,
-      accounts: [process.env.PRIVATE_KEY],
+      accounts: [process.env.PRIVATE_KEY_MAINNET],
     },
   },
   etherscan: {

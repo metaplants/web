@@ -2,7 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 
 // const ADDRESS_LIST_PATH = "tools/random_Address.txt";
-const ADDRESS_LIST_PATH = "tools/metaplants_giveaway.txt";
+const ADDRESS_LIST_PATH = "tools/reciever.txt";
 const IDS = [0];
 const AMOUNTS = [1];
 
@@ -15,10 +15,15 @@ const {
   abi,
 } = require("../artifacts/contracts/MetaplantsPass.sol/MetaplantsPass.json");
 
-// const endPoint = process.env.STAGING_ALCHEMY_POLYGON_MUMBAI_ENDPOINT;
-const endPoint = process.env.STAGING_ALCHEMY_POLYGON_MAINNET_ENDPOINT;
-const contractAddress = process.env.CONTRACT_ADDRESS_METAPLANTS_PASS;
-const privateKey = process.env.PRIVATE_KEY;
+const endPoint = MAINNET
+  ? process.env.STAGING_ALCHEMY_POLYGON_MAINNET_ENDPOINT
+  : process.env.STAGING_ALCHEMY_POLYGON_TESTNET_ENDPOINT;
+const contractAddress = MAINNET
+  ? process.env.CONTRACT_ADDRESS_METAPLANTS_PASS_MAINNET
+  : process.env.CONTRACT_ADDRESS_METAPLANTS_PASS_TESTNET;
+const privateKey = MAINNET
+  ? process.env.PRIVATE_KEY_MAINNET
+  : process.env.PRIVATE_KEY_TESTNET;
 
 const web3 = new Web3(endPoint);
 const contract = new web3.eth.Contract(abi, contractAddress);

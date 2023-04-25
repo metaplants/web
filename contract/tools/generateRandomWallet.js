@@ -1,7 +1,7 @@
 require("dotenv").config();
 const fs = require("fs");
 const Web3 = require("web3");
-const endPoint = process.env.STAGING_ALCHEMY_POLYGON_MUMBAI_ENDPOINT;
+const endPoint = process.env.STAGING_ALCHEMY_POLYGON_TESTNET_ENDPOINT;
 const web3 = new Web3(endPoint);
 const N = 70;
 const randomWallets = [];
