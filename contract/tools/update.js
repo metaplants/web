@@ -4,15 +4,15 @@ const {
   abi,
 } = require("../artifacts/contracts/MetaplantsPass.sol/MetaplantsPass.json");
 
-const MAINNET = false;
+const MAINNET = true;
 const INPUTS = {
   id: 0,
-  imageURI: "ipfs://QmVpDBBc7NdUXPC8zRSmj919nAv9nygHgDWsimMCxdqLzp",
-  animationURI: "ipfs://QmNRNyaCzBe57GJnqYaMfSGs3KMwHffzYv2mMEVspr7ou6",
+  imageURI: "ipfs://QmV1Z9hAAhZ3uPmCmZDcSTnRgAVrxzze7Xgjy5ZNqHzn1d",
+  animationURI: "ipfs://QmWeNe2phu9Xa2QwTnofXK47vWUunmPb2k2Q56TMEdQoCp",
   backgroundColor: "1D1E20",
   name: "metaplants NFT Pass #1",
   description:
-    "パキポディウム・グラキリス。人気の塊根植物の一つ。砂漠などの厳しい環境で生き残るために、茎や根を膨らませて水分を蓄えます。お腹のムチムチ感がたまらない。グラキリスなどが特に人気があります。 (Date: 2023-04-14)",
+    "パキポディウム・グラキリス。人気の塊根植物の一つ。砂漠などの厳しい環境で生き残るために、茎や根を膨らませて水分を蓄えます。お腹のムチムチ感がたまらない。グラキリスなどが特に人気があります。 (Date: 2023-04-25)",
 };
 
 const endPoint = MAINNET
